@@ -1,0 +1,11 @@
+import requests
+import re
+
+url = 'https://imslp.org/wiki/Ballade_No.3%2C_Op.47_(Chopin%2C_Fr%C3%A9d%C3%A9ric)'
+r = requests.get(url)
+r.encoding='utf8'
+data=str(r.text)
+
+data=re.sub('<.+?>','',data,0)
+data=data.split()
+

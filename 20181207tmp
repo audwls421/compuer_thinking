@@ -1,0 +1,76 @@
+import requests
+import re
+
+url = 'https://imslp.org/wiki/Ballade_No.3%2C_Op.47_(Chopin%2C_Fr%C3%A9d%C3%A9ric)'
+
+r = requests.get(url)
+r.encoding='utf8'
+
+data=str(r.text)
+data=re.sub('<.+?>','',data,0)
+
+main_theme = data[data.find('Work Title'):data.find('External Links')]
+scores = data[data.find('Scores ('):data.find('Work Title')]
+
+result_mt = main_theme.split('\n')
+result_scores = scores.split('\n')
+
+while '' in result_mt:
+    result_mt.remove('')
+
+while '' in result_scores:
+    result_scores.remove('')
+
+edit=[]
+
+for i in range(len(result_scores)):
+    if result_scores[i]== 'Editor':
+        edit.append(result_scores[i+1])
+
+publish = []
+
+for i in range(len(result_scores)):
+    if result_scores[i]== 'Publisher. Info.':
+        publish.append(result_scores[i+1])
+
+while True :
+
+    a = input('''\n제목, 작곡가, 작품번호, 조성, 작곡년도, 작곡시대 중에 하나를 선택하세요.
+다음을 입력하면 다음 질문으로 넘어갑니다! : ''')
+
+    if a == '제목' :
+        print("%s"%(result_mt[1]))
+
+    elif a == '작곡가' :
+        print("%s"%(result_mt[10]))
+
+    elif a == '작품번호' :
+        print("%s"%(result_mt[12]))
+
+    elif a == '조성':
+        print("%s"%(result_mt[16]))
+        
+    elif a == '작곡년도' :
+        print("%s"%(result_mt[20]))
+
+    elif a == '작곡시대' :
+        print("%s"%(result_mt[26]))
+
+    elif a == '다음': break
+
+
+num = [1,2,3,4,5,6,7,8,9,10,11]
+
+
+while True :
+    b = int(input('\n위 곡에는 11개의 악보가 있습니다. 원하는 순번의 악보를 골라주세요.: ', ))
+
+    if b in num :
+        print('\n편집자 : ', edit[b-1])
+        print('출판자 : ', publish[b-1])
+
+    elif b not in num :
+        print('\n죄송합니다. 없는 순번입니다.')
+        break
+    
+print('이용해주셔서 감사합니다!')
